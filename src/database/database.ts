@@ -5,7 +5,7 @@ const DB_NAME = 'busca'
 
 export default class Repository{
 
-    public static save(collectionName : string, data : any){
+    public static save(collectionName : string, data : any, success : any, error : any ){
 
         MongoClient.connect(URL, 
             {
@@ -27,16 +27,11 @@ export default class Repository{
                     returnOriginal: false,
                     upsert: true,
                 }
-            ).then(() => {
-               console.log('User saved!')
-            }).catch(error => {
-                console.log(error)
-                throw error
-            })
+            ).then(success).catch(error)
           })
     }
 
-    public static findByEmail(email: string, callback : MongoCallback<any[]>){
+    public static find(searchParameter: Object, collection : string, callback : MongoCallback<any[]>){
         MongoClient.connect(URL, 
             {
                 useNewUrlParser: true,
@@ -48,7 +43,7 @@ export default class Repository{
                 throw err
             }
             const db = client.db(DB_NAME)
-            db.collection('login').find({"email": email}).toArray(callback)
+            db.collection(collection).find(searchParameter).toArray(callback)
           })
     }
 }

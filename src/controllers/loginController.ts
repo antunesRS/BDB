@@ -2,6 +2,7 @@ import express from 'express'
 import iController from '../interfaces/iController'
 import passwordHasher from 'password-hash'
 import database from '../database/database'
+import Login from '../domain/Login'
 
 const ROUTE = '/login'
 const ROUTER = express.Router()
@@ -23,36 +24,32 @@ export default class LoginController implements iController{
     }
 
     doLogin = (req: express.Request, res: express.Response) => {
-        database.findByEmail(req.query.email, (err, result) => {
+        database.find({user: req.query.user}, 'login', (err, result) => {
             if(err){
                 console.log(err)
                 res.status(500).send('Ocorreu um erro ao tentar logar')
             }
             if(result.length != 0){
-                var storedPassword = result[0].hashedPassword
+                const login = new Login().fromDatabase(result)
                 
-                if(passwordHasher.verify(req.query.password, storedPassword))
+                if(passwordHasher.verify(login.password, result[0].hashedPassword))
                     res.send('Auth ok!')
                 else
                     res.send('auth denied!')
 
             }
-                
         })
     }
 
     doRegister = (req: express.Request, res: express.Response) => {
-        var name = req.query.name
-        var email = req.query.email
-        var password = req.query.password
-        var hashedPassword = passwordHasher.generate(password)
-        console.log(`${password} - ${hashedPassword}`)
-        try {
-            database.save('login', {name: name, email: email, password: password, hashedPassword: hashedPassword})
-        } catch (error) {
-            
-        }
-        res.status(200).send('OK!')
+       const login = new Login().fromRequest(req)
+
+        database.save('login', login.toDatabase(), () => {
+            console.log('teste')
+            res.status(200).send('OK!')
+        }, (error: any) => {
+            console.log(error)
+        })
     }
     
 }
