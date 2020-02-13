@@ -1,5 +1,6 @@
 import iDomain from "../interfaces/iDomain"
 import passwordHasher from 'password-hash'
+import {Profile} from '../enums/Enums'
 
 export default class Login implements iDomain {
     
@@ -27,7 +28,7 @@ export default class Login implements iDomain {
         return this
     }
     
-    toDatabase(): Object {
+    toObject(): Object {
        return { 
             email: this._user, 
             password: this._password, 

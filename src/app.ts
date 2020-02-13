@@ -6,7 +6,7 @@ export default class App{
     public app!: express.Application
     public port!: number
 
-    constructor(controllers : [iController], port : number) {
+    constructor(controllers : iController[], port : number) {
         this.app = express();
         this.port = port;
      
@@ -20,7 +20,7 @@ export default class App{
         this.app.use(express.urlencoded({ extended: false }));
     }
 
-    private initializeControllers(controllers : [iController]) {
+    private initializeControllers(controllers : iController[]) {
         controllers.forEach((controller : iController) => {
           this.app.use(controller.route, controller.router);
         });

@@ -19,7 +19,7 @@ export default class UserData implements iDomain{
         return this
     }
 
-    public toDatabase() : Object {
+    public toObject() : Object {
         return {
             name: this._name,
             selfDescription : this._selfDescription, 

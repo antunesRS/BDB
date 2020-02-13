@@ -1,4 +1,0 @@
-enum Profile{
-    CONTRATANTE,
-    DIARISTA
-}
