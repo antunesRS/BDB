@@ -5,6 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var app_1 = __importDefault(require("./app"));
 var loginController_1 = __importDefault(require("./controllers/loginController"));
+var UserDataController_1 = __importDefault(require("./controllers/UserDataController"));
 var PORT = 3001;
-var app = new app_1.default([new loginController_1.default()], PORT);
+var app = new app_1.default([
+    new loginController_1.default(),
+    new UserDataController_1.default()
+], PORT);
 app.listen();

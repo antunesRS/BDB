@@ -31,9 +31,11 @@ export default class LoginController implements iController{
                 res.status(StatusCode.INTERNAL_SERVER_ERROR).send(Error.DATABASE_ERROR)
             }
             if(result.length != 0){
+                console.log(result[0])
                 const login = new Login().fromDatabase(result)
-                
-                if(passwordHasher.verify(login.password, result[0].hashedPassword))
+                console.log(req.query.password)
+                console.log(passwordHasher.verify(req.query.password, result[0].hashedPassword))
+                if(passwordHasher.verify(req.query.password, result[0].hashedPassword))
                     res.status(StatusCode.OK).send('Auth ok!')
                 else
                     res.status(StatusCode.FORBIDDEN).send('auth denied!')
